@@ -1,0 +1,53 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{url}
+\usepackage{adjustbox}
+
+\setlength{\emergencystretch}{3em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+\title{OndaPlay: notas de la presentaci\'on}
+\author{Grupo GLMR}
+\date{GA-TL-02 --- Aplicaciones Distribuidas (ISR-701), 11 de noviembre de 2026}
+
+\begin{document}
+	\maketitle
+	\begin{center}
+		Repositorio: \adjustbox{max width=0.8\linewidth}{\url{https://github.com/yaser-uwu/GLMR}}
+	\end{center}
+	
+	\section*{Escenario}
+	OndaPlay es una plataforma de video por suscripci\'on. El diagrama del grupo muestra c\'omo se comunican sus servicios y est\'a dividido en tres partes: (1) acceso, licencias y suscripciones, (2) telemetr\'ia y recomendaciones y (3) entrega de video. Cada integrante explica su parte abajo.
+	
+	\section*{Notas de presentaci\'on Garc\'ia: acceso, cat\'alogo y licencias}
+	[Pendiente]
+	
+	\section*{Notas de presentaci\'on Lombeida: entrega de video}
+	[Pendiente]
+	
+	\section*{Notas de presentaci\'on Manotoa: telemetr\'ia y recomendaciones}
+	[Pendiente]
+	
+	\section*{Notas de presentaci\'on Reinoso: renovaci\'on, pagos y cancelaci\'on}
+	\textbf{Qu\'e hice.} Dibuj\'e c\'omo se renueva una suscripci\'on y c\'omo se avisa al servicio de licencias para que una suscripci\'on vencida o cancelada no pueda iniciar reproducciones nuevas en menos de 5 minutos (requisito R4).
+	
+	\textbf{C\'omo funciona.}
+	\begin{enumerate}[leftmargin=*,itemsep=2pt]
+		\item El usuario renueva desde el Reproductor. La Entrada web pasa el pedido a Facturaci\'on por gRPC y espera la respuesta.
+		\item Facturaci\'on cobra a la Pasarela de pagos por HTTPS y espera la respuesta. El cobro lleva una clave que evita cobrar dos veces si el pedido se repite.
+		\item Facturaci\'on avisa el cambio por Kafka, sin esperar respuesta. Licencias lee el aviso y actualiza su copia del estado.
+		\item Si Licencias duda de su copia, pregunta a Facturaci\'on por gRPC.
+	\end{enumerate}
+	
+	\textbf{C\'omo se cumple R4.} Cada licencia dura como m\'aximo 4 minutos y nunca m\'as all\'a del vencimiento de la suscripci\'on. Si Licencias pierde la conexi\'on con Kafka o lee los avisos con m\'as de 30 segundos de atraso, pregunta a Facturaci\'on antes de emitir una licencia. Si no puede confirmar el estado, no emite una licencia nueva y el usuario reintenta. En el peor caso, el bloqueo ocurre a los 4 minutos y 30 segundos, bajo el l\'imite de 5.
+	
+	\textbf{Por qu\'e as\'i.} Consultar a Facturaci\'on en cada reproducci\'on tambi\'en cumplir\'ia R4, pero el arranque depender\'ia de Facturaci\'on: si se cae o se demora, nadie podr\'ia empezar a ver nada (requisitos R2 y R6). Con el aviso por Kafka, Licencias responde con su copia.
+	
+	\textbf{Qu\'e se sacrifica.} Si Facturaci\'on est\'a ca\'ida y Licencias no puede confirmar el estado, un usuario con suscripci\'on v\'alida tiene que reintentar.
+		
+\end{document}
