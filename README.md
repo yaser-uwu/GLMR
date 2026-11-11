@@ -48,7 +48,7 @@
 
 ## Cómo compilar las notas
 
-Requisitos: MiKTeX (o TeX Live) con los paquetes `babel` (español), `geometry`, `enumitem`, `url` y `adjustbox`.
+Requisitos: MiKTeX (o TeX Live) con los paquetes `babel` (español), `geometry`, `enumitem`, `url`, `adjustbox` y `ae`.
 
 Desde la carpeta del repositorio, en una terminal:
 

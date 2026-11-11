@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{ae}
 \usepackage[spanish]{babel}
 \usepackage[margin=2.2cm]{geometry}
 \usepackage{enumitem}
@@ -28,7 +29,23 @@
 	[Pendiente]
 	
 	\section*{Notas de presentaci\'on Lombeida: entrega de video}
-	[Pendiente]
+	\textbf{Qu\'e hice.} Dibuj\'e el recorrido desde que el Reproductor recibe la licencia de la Entrada web hasta que muestra el primer cuadro. Inclu\'i la Entrada CDN, dos nodos de borde como ejemplo de una red con m\'as nodos y el Origen de video. Mi parte responde a los 50\,000 espectadores simult\'aneos (R1), al arranque en menos de 2 segundos incluida la licencia (R2) y a la ca\'ida de un nodo de borde (F3).
+
+	\textbf{C\'omo funciona.}
+	\begin{enumerate}[leftmargin=*,itemsep=2pt]
+		\item La Entrada web devuelve al Reproductor una licencia firmada por HTTPS. Es la respuesta s\'incrona del flujo de Kevin: el Reproductor la espera antes de pedir el video.
+		\item El Reproductor pide a la Entrada CDN el manifiesto HLS y despu\'es el primer fragmento por HTTPS. Espera esas respuestas porque necesita los datos para comenzar a reproducir.
+		\item La Entrada CDN elige un nodo de borde sano. El nodo A responde desde su cach\'e NGINX; si no tiene el manifiesto o el fragmento, lo obtiene del Origen por HTTPS y lo guarda para otras solicitudes.
+		\item El Reproductor almacena temporalmente los datos, decodifica el fragmento y muestra el primer cuadro. Este \`ultimo paso ocurre dentro del cliente y no es una comunicaci\'on por red.
+	\end{enumerate}
+
+	\textbf{C\'omo se plantean R1 y R2.} Los nodos A y B representan una red de varios nodos, no el total de servidores. La cach\'e reparte la entrega y evita que los 50\,000 espectadores pidan cada fragmento directamente al Origen. Como ejemplo de dimensionamiento, a 3 Mb/s por espectador se requieren unos 150 Gb/s de salida agregada; la capacidad real debe medirse por regi\'on y conservar margen si un nodo falla. Para R2 propongo un presupuesto de 450 ms para licencia con Kevin, 150 ms para ruta y manifiesto, 650 ms para el primer fragmento, 250 ms para b\'ufer y decodificaci\'on y 300 ms de margen: 1\,800 ms en total. Son metas de dise\~no que deben acordarse con Kevin y comprobarse bajo carga.
+
+	\textbf{Qu\'e pasa en F3.} Si el nodo A cae, la Entrada CDN deja de seleccionarlo y el Reproductor reintenta la solicitud pendiente por la misma direcci\'on de la CDN. Otro nodo sano, representado por B, responde desde su cach\'e o consulta al Origen. Se conserva la posici\'on de reproducci\'on, aunque la detecci\'on y el reintento pueden causar una pausa.
+
+	\textbf{Por qu\'e as\'i.} HLS divide el video en un manifiesto y fragmentos que pueden entregarse por HTTPS y guardarse en los bordes de la CDN. Esto permite acercar el contenido a los espectadores y repartir la carga entre nodos. El balanceador evita seguir enviando solicitudes a un nodo que ha fallado.
+
+	\textbf{Qu\'e se sacrifica.} Un fallo de cach\'e obliga a consultar al Origen y puede aumentar el tiempo de arranque. La ruta alternativa tambi\'en requiere tiempo de detecci\'on y capacidad libre. Por eso el objetivo de R2 no se puede prometer para todos los fallos sin pruebas de carga y de recuperaci\'on.
 	
 	\section*{Notas de presentaci\'on Manotoa: telemetr\'ia y recomendaciones}
 	[Pendiente]
