@@ -1,0 +1,71 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="aporte04" name="04-eduardo-suscripciones">
+    <mxGraphModel dx="1484" dy="836" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1250" pageHeight="780" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t" parent="1" style="text;html=0;fontSize=14;fontStyle=1;align=left;" value="OndaPlay · Aporte 04 (Eduardo Reinoso) · Renovación, pagos y cancelación de suscripciones" vertex="1">
+          <mxGeometry height="26" width="900" x="30" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="rep" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="Reproductor&#xa;Cliente web, móvil o TV" vertex="1">
+          <mxGeometry height="80" width="140" x="30" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="web" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="Entrada web&#xa;Spring Boot - HTTPS" vertex="1">
+          <mxGeometry height="80" width="150" x="330" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="fac" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="Facturación y suscripciones" vertex="1">
+          <mxGeometry height="80" width="190" x="650" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="pas" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;fontSize=12;fontStyle=1;" value="Pasarela de pagos&#xa;(sistema externo)" vertex="1">
+          <mxGeometry height="70" width="190" x="650" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="kaf" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=0;boundedLbl=1;backgroundOutline=1;size=12;fontSize=12;fontStyle=1;fillStyle=solid;" value="Kafka&#xa;(tema: suscripciones)" vertex="1">
+          <mxGeometry height="90" width="170" x="1000" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="lic" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="Autenticación y licencias" vertex="1">
+          <mxGeometry height="80" width="190" x="990" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="rep" style="startArrow=open;startFill=0;endArrow=block;html=0;rounded=0;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="web" value="E1&#xa;Renovar suscripción">
+          <mxGeometry relative="1" y="20" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="web" style="startArrow=open;startFill=0;endArrow=block;html=0;rounded=0;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="fac" value="E2&#xa;RenovarSuscripcion">
+          <mxGeometry relative="1" x="0.0588" y="20" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="fac" style="startArrow=open;startFill=0;endArrow=block;html=0;rounded=0;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="pas" value="E3&#xa;Cobrar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="fac" style="endArrow=block;html=0;rounded=0;strokeWidth=2;dashed=1;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="kaf" value="E4&#xa;Aviso: suscripción&#xa;actualizada">
+          <mxGeometry relative="1" y="30" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="kaf" style="endArrow=block;html=0;rounded=0;strokeWidth=2;dashed=1;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="lic" value="E5&#xa;Leer el aviso">
+          <mxGeometry relative="1" x="-0.0041" y="30" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="k7" edge="1" parent="1" source="lic" style="startArrow=open;startFill=0;endArrow=block;html=0;rounded=0;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=0.5;entryY=1;" target="fac" value="K7&#xa;Verificar suscripción">
+          <mxGeometry relative="1" x="-0.1529" y="20" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="745" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r4" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#ffffff;strokeColor=#999999;align=left;verticalAlign=top;fontSize=11;spacingLeft=8;spacingTop=4;" value="Regla R4: si una suscripción vence o se cancela, no se debe poder iniciar una reproducción nueva en menos de 5 minutos.&#xa;&#xa;Cómo se cumple:&#xa;1. Facturación avisa el cambio por Kafka (E4, E5) y Licencias actualiza su copia.&#xa;2. Cada licencia dura máximo 4 minutos y nunca pasa de la fecha de vencimiento.&#xa;3. Si su copia está vencida, Licencias pregunta a Facturación (K7).&#xa;4. Si no puede confirmar el estado, no emite licencia nueva y el usuario reintenta.&#xa;&#xa;Quien ya está viendo algo sigue hasta que caduque su licencia (máximo 4 minutos)." vertex="1">
+          <mxGeometry height="175" width="430" x="30" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="lg" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#ffffff;strokeColor=#999999;align=left;verticalAlign=top;fontSize=11;spacingLeft=8;spacingTop=4;" value="Cómo leer el diagrama&#xa;Línea continua con flecha en los dos extremos = síncrona: quien envía espera la respuesta.&#xa;Línea discontinua = asíncrona: quien envía sigue sin esperar.&#xa;Kafka = sistema que guarda los avisos en orden para que otro servicio los lea después.&#xa;gRPC = forma de llamar a una función de otro servicio por la red.&#xa;Azul = servicio propio · Gris discontinuo = sistema externo · Amarillo = mensajería." vertex="1">
+          <mxGeometry height="130" width="440" x="490" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="tb" parent="1" style="text;html=1;whiteSpace=wrap;overflow=fill;align=left;verticalAlign=top;fontSize=11;" value="&lt;table style=&#39;border-collapse:collapse;font-size:11px;width:100%;&#39;&gt;&lt;tr&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Flecha&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;De → A&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Qué viaja&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Tipo&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Sinc./Asinc.&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Protocolo&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Middleware&lt;/th&gt;&lt;th style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Por qué&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;E1&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Reproductor → Entrada web&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Plan y medio de pago; vuelve confirmación o rechazo&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Petición-respuesta&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Síncrona&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;HTTPS&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;REST/JSON&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;El usuario espera el resultado de la renovación.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;E2&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Entrada web → Facturación&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;usuarioId y plan; vuelve el resultado&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;RPC&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Síncrona&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;HTTP/2 + TLS&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;gRPC&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Igual que los demás servicios internos del diagrama.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;E3&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Facturación → Pasarela de pagos&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Monto y token de pago; vuelve aprobado o rechazado&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Petición-respuesta&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Síncrona&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;HTTPS&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;REST/JSON&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;La pasarela es de un tercero y ofrece una API web.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;E4&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Facturación → Kafka&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Aviso con usuarioId, estado y vence_en&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Mensajería (pub/sub)&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Asíncrona&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;TCP&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Kafka&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Facturación no espera a Licencias para confirmar el pago.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;E5&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Kafka → Licencias&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;El mismo aviso&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Mensajería (pub/sub)&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Asíncrona&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;TCP&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Kafka&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Licencias actualiza su copia sin consultar en cada reproducción.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;K7&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Licencias → Facturación&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;usuarioId; vuelve activo/inactivo, fin de suscripción y validUntil&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;RPC&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Síncrona&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;HTTP/2 + TLS&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;gRPC&lt;/td&gt;&lt;td style=&#39;border:1px solid #999;padding:3px;text-align:left;&#39;&gt;Solo si su copia está vencida o desactualizada.&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="200" width="1160" x="30" y="520" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
