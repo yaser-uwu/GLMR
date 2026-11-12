@@ -26,7 +26,21 @@
 	OndaPlay es una plataforma de video por suscripci\'on. El diagrama del grupo muestra c\'omo se comunican sus servicios y est\'a dividido en tres partes: (1) acceso, licencias y suscripciones, (2) telemetr\'ia y recomendaciones y (3) entrega de video. Cada integrante explica su parte abajo.
 	
 	\section*{Notas de presentaci\'on Garc\'ia: acceso, cat\'alogo y licencias}
-	[Pendiente]
+	\textbf{Qu\'e hice.} Dise\~n\'e el flujo que sigue el Reproductor para iniciar sesi\'on, consultar el cat\'alogo y obtener una licencia para el t\'itulo elegido. La Entrada web, implementada en Spring Boot, comunica al Reproductor con Cat\'alogo y con las r\'eplicas de Autenticaci\'on y licencias. Este \'ultimo servicio consulta a Facturaci\'on cuando necesita confirmar la vigencia de la suscripci\'on. Con la licencia firmada, el Reproductor pide el manifiesto y los fragmentos HLS a la CDN por HTTPS sobre HTTP/2.
+
+	\textbf{C\'omo funciona.}
+	\begin{enumerate}[leftmargin=*,itemsep=2pt]
+		\item \textbf{Inicio de sesi\'on (K1--K2).} El Reproductor env\'ia el usuario y la contrase\~na por HTTPS a la Entrada web, que ejecuta \texttt{IniciarSesion} por gRPC. El Reproductor recibe una sesi\'on v\'alida o un rechazo de credenciales.
+		\item \textbf{Consulta del cat\'alogo (K3--K4).} El Reproductor pide el cat\'alogo por HTTPS con filtros y paginaci\'on. La Entrada web llama a \texttt{ListarTitulos} por gRPC y devuelve los identificadores, t\'itulos y metadatos para mostrarlos en pantalla.
+		\item \textbf{Solicitud de licencia (K5--K6).} El Reproductor env\'ia la sesi\'on y el identificador del contenido por HTTPS. La Entrada web llama a \texttt{EmitirLicencia} por gRPC. Si se confirma que la suscripci\'on est\'a activa, Autenticaci\'on y licencias firma una licencia que identifica al usuario, al contenido y su fecha de expiraci\'on.
+		\item \textbf{Verificaci\'on de la suscripci\'on (K7).} Si el servicio necesita confirmar la vigencia, llama a \texttt{VerificarSuscripcion} por gRPC con el identificador del usuario. Facturaci\'on devuelve el estado, su versi\'on, el fin de la suscripci\'on y \texttt{validUntil}, que indica hasta cu\'ando se puede confiar en ese estado. Si la suscripci\'on est\'a inactiva, se rechaza el acceso. Si no se puede confirmar el estado cuando hace falta, se devuelve un error temporal y el Reproductor puede reintentar.
+	\end{enumerate}
+
+	\textbf{C\'omo se plantean R2 y R4.} Para R2, el presupuesto de arranque propuesto con la entrega de video reserva 450\,ms desde la solicitud de licencia hasta su respuesta. Esa cifra es una meta que se debe medir bajo carga, incluida la consulta a Facturaci\'on cuando corresponda. Para R4, Facturaci\'on publica avisos versionados por Kafka de forma as\'incrona. Al recibir una versi\'on nueva, Licencias invalida el estado anterior de la suscripci\'on. La licencia vence como m\'aximo a los 4 minutos y queda limitada tambi\'en por \texttt{validUntil} y por el fin de la suscripci\'on.
+
+	\textbf{Por qu\'e as\'i.} Us\'e REST sobre HTTPS entre el Reproductor y la Entrada web, y llamadas gRPC sobre HTTP/2 con TLS entre servicios. Las solicitudes son s\'incronas porque el cliente necesita la sesi\'on para continuar, los t\'itulos para mostrar el cat\'alogo y la licencia antes de pedir el video.
+
+	\textbf{Qu\'e se sacrifica.} Cuando hay que consultar a Facturaci\'on, esa llamada agrega tiempo al arranque. Si la consulta falla y el servicio carece de un estado vigente, incluso un usuario con suscripci\'on activa tiene que reintentar.
 	
 	\section*{Notas de presentaci\'on Lombeida: entrega de video}
 	\textbf{Qu\'e hice.} Dibuj\'e el recorrido desde que el Reproductor recibe la licencia de la Entrada web hasta que muestra el primer cuadro. Inclu\'i la Entrada CDN, dos nodos de borde como ejemplo de una red con m\'as nodos y el Origen de video. Mi parte responde a los 50\,000 espectadores simult\'aneos (R1), al arranque en menos de 2 segundos incluida la licencia (R2) y a la ca\'ida de un nodo de borde (F3).
@@ -85,5 +99,7 @@
 	\textbf{Por qu\'e as\'i.} Consultar a Facturaci\'on en cada reproducci\'on tambi\'en cumplir\'ia R4, pero el arranque depender\'ia de Facturaci\'on: si se cae o se demora, nadie podr\'ia empezar a ver nada (requisitos R2 y R6). Con el aviso por Kafka, Licencias responde con su copia.
 	
 	\textbf{Qu\'e se sacrifica.} Si Facturaci\'on est\'a ca\'ida y Licencias no puede confirmar el estado, un usuario con suscripci\'on v\'alida tiene que reintentar.
-		
+		\section*{Declaraci\'on de uso de inteligencia artificial}
+        Durante la elaboración de este informe se utilizó ChatGPT (OpenAI) como apoyo para organizar y redactar parte de las notas de presentación, y para revisar su concordancia con el diagrama grupal de OndaPlay.
+
 \end{document}
