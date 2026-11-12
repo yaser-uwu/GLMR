@@ -48,8 +48,27 @@
 	\textbf{Qu\'e se sacrifica.} Un fallo de cach\'e obliga a consultar al Origen y puede aumentar el tiempo de arranque. La ruta alternativa tambi\'en requiere tiempo de detecci\'on y capacidad libre. Por eso el objetivo de R2 no se puede prometer para todos los fallos sin pruebas de carga y de recuperaci\'on.
 	
 	\section*{Notas de presentaci\'on Manotoa: telemetr\'ia y recomendaciones}
-	[Pendiente]
-	
+    \textbf{Qu\'e hice.} Dise\~n\'e la arquitectura del m\'odulo de telemetr\'ia y recomendaciones utilizando WebSockets para ingesta, un Message Broker (Kafka/Redis) como b\'ufer y procesadores workers con base de datos anal\'itica.
+
+    \textbf{C\'omo funciona.}
+    \begin{enumerate}[leftmargin=*,itemsep=2pt]
+        \item El reproductor env\'ia eventos por WebSockets hacia la capa de ingesta de forma as\'incrona.
+        \item El Message Broker almacena temporalmente los datos para garantizar la tolerancia a fallos.
+        \item Los procesadores workers distribuyen y transforman la informaci\'on para alimentar una base de datos anal\'itica.
+        \item El servicio de recomendaciones consume los datos procesados para actualizar el cat\'alogo y los perfiles de usuario.
+    \end{enumerate}
+
+    \textbf{C\'omo se cumple con R3, F2, y R5.} 
+    \begin{itemize}[leftmargin=*,itemsep=2pt]
+        \item \textbf{R3:} Maneja 5\,000 eventos/s con menos de 1\,\% de p\'erdida mediante canales persistentes.
+        \item \textbf{F2:} Retiene los datos en el b\'ufer del broker durante las 2 horas de caída del servicio de recomendaciones.
+        \item \textbf{R5:} Procesa por lotes los eventos para actualizar sugerencias en hasta 15 minutos.
+    \end{itemize}
+
+    \textbf{Por qu\'e as\'i.} Separa los procesos r\'apidos del procesamiento pesado, desacoplando los componentes para evitar bloqueos y garantizar alta disponibilidad ante fallos prolongados.
+
+    \textbf{Qu\'e se sacrific\'o.} Se asumi\'o eventual consistencia y un ligero retraso acumulado en el tiempo de procesamiento de las recomendaciones tras la recuperaci\'on de fallas masivas.
+
 	\section*{Notas de presentaci\'on Reinoso: renovaci\'on, pagos y cancelaci\'on}
 	\textbf{Qu\'e hice.} Dibuj\'e c\'omo se renueva una suscripci\'on y c\'omo se avisa al servicio de licencias para que una suscripci\'on vencida o cancelada no pueda iniciar reproducciones nuevas en menos de 5 minutos (requisito R4).
 	
