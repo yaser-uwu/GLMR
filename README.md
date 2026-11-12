@@ -37,8 +37,7 @@
 | `GLMR_OndaPlay.drawio.png` | Exportación en PNG del diagrama principal |
 | `notas_presentacion.tex` | Notas de presentación: aporte de cada integrante y preguntas recibidas |
 | `notas_presentacion.pdf` | Notas compiladas |
-| `APORTES/` | Diagramas individuales (`.drawio`) de cada integrante, que se integraron en el diagrama principal. Incluye el PNG del aporte de Reinoso |
-| `MANOTOA ALAVA CARLOS ALEXANDER/Referencias/` | Referencias consultadas por Carlos Manotoa para su parte |
+| `APORTES/` | Diagramas individuales (`.drawio`) de cada integrante, que se integraron en el diagrama principal. Incluye el PNG del aporte de Reinoso y las referencias consultadas por Carlos Manotoa (PDF y `referencias.txt`) |
 
 ## Cómo abrir el diagrama
 
